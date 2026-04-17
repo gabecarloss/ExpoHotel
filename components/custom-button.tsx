@@ -13,9 +13,11 @@ export const CustomButton = (props: ButtonProps) => {
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: ACCENT_COLOR,
+        opacity: props.disabled ? 0.5 : 1,
     }}
     mode = {props.mode || "contained"}
     onPress = {props.onPress}
+    disabled = {props.disabled}
     >
         <Text>{props.children}</Text>
     </Button>

@@ -30,7 +30,7 @@ export default function RegisterForm() {
         try {
             setLoading(true);
             const response = await registerUser(data);
-            if (response.sucess) {
+            if (response.success) {
                 alert("Registration sucefull! Please login.");
             } else {
                 alert(response.message);
