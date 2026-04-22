@@ -1,6 +1,8 @@
 import { PaperProvider, MD3LightTheme as DefaultTheme,} from "react-native-paper";
 import { Stack } from "expo-router";
 import { ACCENT_COLOR, PRIMARY_COLOR, SECONDARY_COLOR } from "@/constants";
+import Toast from 'react-native-toast-message';
+
 
 export default function Layout() {
 
@@ -17,6 +19,7 @@ export default function Layout() {
       theme = {theme}
     >
       <Stack screenOptions={{ headerShown: false }} />
+      <Toast/>
     </PaperProvider>
   );
 }

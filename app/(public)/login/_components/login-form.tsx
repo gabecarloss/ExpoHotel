@@ -10,9 +10,12 @@ import { Link } from "expo-router";
 import React from "react";
 import { loginUser } from "@/services/users";
 import { useRouter } from "expo-router";
+import { useUsersStore } from "@/store/users-store";
+import Toast from "react-native-toast-message";
 
 export default function LoginForm() {
     const [loading, setLoading] = React.useState(false);
+    const { setUser } = useUsersStore();
     const router = useRouter();
 
     const {
@@ -35,12 +38,20 @@ export default function LoginForm() {
                 password: data.password,
             });
 
-            console.log("LOGIN RESPONSE:", response);
-
             if (!response.success) {
-                alert(response.message);
+                Toast.show({
+                    type: "error",
+                    text1: "Login failed",
+                    text2: response.message,
+                });
                 return;
+            } else {
+                Toast.show({
+                    text1: "Login successfull!",
+                })
             }
+
+            setUser(response.data);
 
             const role = response.data?.role?.toLowerCase();
 
@@ -61,7 +72,11 @@ export default function LoginForm() {
 
         } catch (error) {
             console.log(error);
-            alert("Login failed, please try again.");
+            Toast.show({
+                type: "error",
+                text1: "An error ocurred",
+                text2: (error as Error).message,
+            })
         } finally {
             setLoading(false);
         }
@@ -70,7 +85,7 @@ export default function LoginForm() {
     return (
         <FlexBox gap={30}>
 
-            {/* EMAIL */}
+            { }
             <Controller
                 control={control}
                 name="email"
@@ -94,7 +109,7 @@ export default function LoginForm() {
                 )}
             />
 
-            {/* PASSWORD */}
+            { }
             <Controller
                 control={control}
                 name="password"
@@ -119,7 +134,7 @@ export default function LoginForm() {
                 )}
             />
 
-            {/* BUTTON */}
+            { }
             <CustomButton
                 disabled={loading}
                 onPress={handleSubmit(onSubmit)}
@@ -128,7 +143,7 @@ export default function LoginForm() {
                 LOGIN
             </CustomButton>
 
-            {/* LINK */}
+            { }
             <FlexBox flexDirection="row" justifyContent="center" gap={5}>
                 <CustomText value="Don't have an account?" />
                 <Link href="/register">

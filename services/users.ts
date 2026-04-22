@@ -1,44 +1,30 @@
 import { supabaseConfig } from "@/config/supabase-config";
 import { IUser } from "@/interfaces";
 
-
 export const registerUser = async (payload: Partial<IUser>) => {
     try {
-        const authResponse = await supabaseConfig.auth.signUp({
-            email: payload.email || "",
-            password: payload.password || "",
-        });
+        const { data: authData, error: authError } =
+            await supabaseConfig.auth.signUp({
+                email: payload.email || "",
+                password: payload.password || "",
+                options: {
+                    data: {
+                        name: payload.name,
+                    },
+                },
+            });
 
-        if (authResponse.error) {
+        if (authError) {
             return {
                 success: false,
-                message: authResponse.error.message,
+                message: authError.message,
             };
         }
 
-        const userId = authResponse.data.user?.id;
-
-        if (!userId) {
+        if (!authData.user?.id) {
             return {
                 success: false,
                 message: "Failed to retrieve user id from auth",
-            };
-        }
-
-        const dbResponse = await supabaseConfig.from("user_profiles").insert([
-            {
-                id: userId,
-                name: payload.name,
-                role: "customer",
-                is_active: true,
-                profile_picture: "",
-            },
-        ]);
-
-        if (dbResponse.error) {
-            return {
-                success: false,
-                message: dbResponse.error.message,
             };
         }
 
@@ -55,22 +41,22 @@ export const registerUser = async (payload: Partial<IUser>) => {
     }
 };
 
-
 export const loginUser = async (payload: Partial<IUser>) => {
     try {
-        const authResponse = await supabaseConfig.auth.signInWithPassword({
-            email: payload.email || "",
-            password: payload.password || "",
-        });
+        const { data: authData, error: authError } =
+            await supabaseConfig.auth.signInWithPassword({
+                email: payload.email || "",
+                password: payload.password || "",
+            });
 
-        if (authResponse.error) {
+        if (authError) {
             return {
                 success: false,
-                message: authResponse.error.message,
+                message: authError.message,
             };
         }
 
-        const userId = authResponse.data.user?.id;
+        const userId = authData.user?.id;
 
         if (!userId) {
             return {
@@ -113,20 +99,19 @@ export const loginUser = async (payload: Partial<IUser>) => {
     }
 };
 
-
 export const getLoggedInUser = async () => {
     try {
-        const { data: sessionData, error: sessionError } =
+        const { data, error } =
             await supabaseConfig.auth.getSession();
 
-        if (sessionError) {
+        if (error) {
             return {
                 success: false,
-                message: sessionError.message,
+                message: error.message,
             };
         }
 
-        const userId = sessionData.session?.user?.id;
+        const userId = data.session?.user?.id;
 
         if (!userId) {
             return {
@@ -150,14 +135,13 @@ export const getLoggedInUser = async () => {
 
         return {
             success: true,
-            message: "Logged in user fetched successfully",
             data: dbUser,
         };
 
     } catch (error) {
         return {
             success: false,
-            message: (error as Error).message || "Failed to fetch logged in user",
+            message: (error as Error).message,
         };
     }
 };

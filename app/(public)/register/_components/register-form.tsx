@@ -9,6 +9,7 @@ import { USER_ROLES } from "@/constants";
 import { Link } from "expo-router";
 import React from "react";
 import { registerUser } from "@/services/users";
+import Toast from "react-native-toast-message";
 
 
 export default function RegisterForm() {
@@ -31,12 +32,22 @@ export default function RegisterForm() {
             setLoading(true);
             const response = await registerUser(data);
             if (response.success) {
-                alert("Registration sucefull! Please login.");
+                Toast.show({
+                    type: "success",
+                    text1: "Registration sucefull! Please login."
+                });
             } else {
-                alert(response.message);
+                Toast.show ({
+                    type: "error",
+                    text1: response.message
+                });
             }
         } catch (error) {
-            alert("An unexpected error ocurred.");
+            Toast.show({
+                type: "error",
+                text1: "An unexpected error ocurred.",
+                text2: (error as Error).message,
+            });
         } finally {
             setLoading(false);
         }
