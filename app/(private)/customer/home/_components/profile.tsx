@@ -1,11 +1,13 @@
 import React from 'react';
-import { FlexBox,  } from '@/components/flexbox';
+import { FlexBox, } from '@/components/flexbox';
 import { CustomText } from '@/components/custom-text';
 import { CustomButton } from '@/components/custom-button';
 import { useUsersStore } from '@/store/users-store';
 import { supabaseConfig } from '@/config/supabase-config';
 import Toast from 'react-native-toast-message';
 import { useRouter } from 'expo-router';
+import TabTitle from './tab-title';
+import { Image } from 'react-native';
 
 
 export const Profile = () => {
@@ -14,42 +16,81 @@ export const Profile = () => {
     const { user } = useUsersStore();
 
     const onLogout = () => {
-            try {
-                supabaseConfig.auth.signOut();
-                router.replace("/(public)/login");
-                Toast.show({
-                    text1: "Logged out successfully!",
-                })
-            } catch (error) {
-                Toast.show({
-                    type: "error",
-                    text1: "Error login out!",
-                    text2: (error as Error).message,
-                })
-            }
+        try {
+            supabaseConfig.auth.signOut();
+            router.replace("/(public)/login");
+            Toast.show({
+                text1: "Logged out successfully!",
+            })
+        } catch (error) {
+            Toast.show({
+                type: "error",
+                text1: "Error login out!",
+                text2: (error as Error).message,
+            })
         }
+    }
+
+    const renderUserPropertyValue = (label: string, value: string) => {
+        return (
+            <FlexBox>
+                <CustomText value={label} fontSize={14} fontWeight='bold' />
+                <CustomText value={value} fontSize={16} />
+            </FlexBox>
+        );
+    };
+
     return (
         <FlexBox
-            gap={60}
-            paddingHorizontal={50}
-            justifyContent="center"
-            alignItems="center"
+            gap={35}
+            padding={20}
             flex={1}
         >
-
-            {user && (
-                <>
-                    <CustomText fontSize={50} value={`Welcome, ${user?.name ?? user?.email ?? "User"}!`} />
+            <TabTitle title="Profile" caption="Manage your account profile!" />
+            <FlexBox
+                padding={20}
+                style={{
+                    borderWidth: 1,
+                    borderColor: "d3d3d3",
+                    borderRadius: 5,
+                }}
+            >
+                <FlexBox
+                    alignItems='center'
+                    gap={15}
+                >
+                    <Image
+                        source={{ uri: user?.profile_picture }}
+                        style={{ width: 100, height: 100, borderRadius: 50 }}
+                    />
                     <CustomButton
-                        onPress={onLogout}
-                    >
-                        Logout
+                        mode="outlined">
+                        Change Profile Picture
                     </CustomButton>
-                </>
-            )}
+                </FlexBox>
 
-            {!user && <CustomText fontSize={20} value="No user data avaible." />}
+                <FlexBox
+                    gap={15}
+                    paddingVertical={20}
+                >
+                    {renderUserPropertyValue("Name", user?.name || "")}
+                    {renderUserPropertyValue("Email", user?.email || "")}
+                    {renderUserPropertyValue("Role", user?.role || "")}
+                    {renderUserPropertyValue(
+                        "Account Created At",
+                        new Date(user?.created_at || "").toLocaleDateString(),
+                    )}
+                </FlexBox>
+            </FlexBox>
+
+            <CustomButton
+                onPress={ onLogout }
+                >
+                Logout
+            </CustomButton>
 
         </FlexBox>
-    )
-}
+    );
+};
+
+export default Profile;

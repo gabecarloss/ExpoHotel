@@ -8,3 +8,5 @@ export const Bookings = () => {
         </View>
     );
 };
+
+export default Bookings;

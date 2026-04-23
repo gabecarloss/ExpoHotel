@@ -73,7 +73,10 @@ const Index = () => {
     if (loading) {
         return (
             <FlexBox flex={1} justifyContent="center" alignItems="center">
-                <CustomText value="Loading session..." />
+                <CustomText
+                 value="Loading session..."
+                 fontSize={30}
+                 />
             </FlexBox>
         );
     }

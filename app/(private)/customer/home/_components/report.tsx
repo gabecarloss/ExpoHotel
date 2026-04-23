@@ -8,3 +8,5 @@ export const Report = () => {
         </View>
     );
 };
+
+export default Report;

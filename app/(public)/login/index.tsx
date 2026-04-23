@@ -13,7 +13,7 @@ const LoginScreen = () => {
             }}
         >
             <FlexBox
-                backgroundColor={ACCENT_COLOR}
+                backgroundColor={PRIMARY_COLOR}
                 flex={1}
             >
 
@@ -34,7 +34,7 @@ const LoginScreen = () => {
                     <CustomText
                     value="Complete the form below to login in your account."
                     fontSize={18}
-                    fontColor={PRIMARY_COLOR}
+                    fontColor={ACCENT_COLOR}
                     fontWeight="bold"
                     ></CustomText>
 
