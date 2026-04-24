@@ -1,7 +1,7 @@
+import { ACCENT_COLOR, PRIMARY_COLOR, SECONDARY_COLOR } from "@/constants";
 import React from "react";
 import {Text} from "react-native";
 import { Button, ButtonProps } from "react-native-paper";
-import { ACCENT_COLOR, PRIMARY_COLOR } from "@/constants";
 
 export const CustomButton = (props: ButtonProps) => {
   return (

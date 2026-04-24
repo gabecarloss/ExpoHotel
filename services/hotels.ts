@@ -22,3 +22,25 @@ export const fetchActiveHotels = async () => {
         };
     }
 };
+
+export const fetchHotelById = async (id: string) => {
+    try {
+        const { data, error } = await supabaseConfig
+        .from("hotels")
+        .select("*")
+        .eq("id", id)
+        .single();
+    if (error) {
+        throw error;
+    }
+    return {
+        success: true,
+        data: data as IHotel,
+    };
+    } catch (erro) {
+        return {
+            success: false,
+            data: null,
+        }
+    }
+    };

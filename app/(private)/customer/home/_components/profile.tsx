@@ -7,7 +7,9 @@ import { supabaseConfig } from '@/config/supabase-config';
 import Toast from 'react-native-toast-message';
 import { useRouter } from 'expo-router';
 import TabTitle from './tab-title';
-import { Image } from 'react-native';
+import { Image, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { SECONDARY_COLOR } from '@/constants';
 
 
 export const Profile = () => {
@@ -41,55 +43,62 @@ export const Profile = () => {
     };
 
     return (
-        <FlexBox
-            gap={35}
-            padding={20}
-            flex={1}
+        <SafeAreaView
+            style={{ flex: 1 }}
         >
-            <TabTitle title="Profile" caption="Manage your account profile!" />
-            <FlexBox
-                padding={20}
-                style={{
-                    borderWidth: 1,
-                    borderColor: "d3d3d3",
-                    borderRadius: 5,
-                }}
-            >
+            <ScrollView>
+
                 <FlexBox
-                    alignItems='center'
-                    gap={15}
+                    gap={35}
+                    padding={20}
+                    flex={1}
                 >
-                    <Image
-                        source={{ uri: user?.profile_picture }}
-                        style={{ width: 100, height: 100, borderRadius: 50 }}
-                    />
+                    <TabTitle title="Profile" caption="Manage your account profile!" />
+                    <FlexBox
+                        padding={20}
+                        style={{
+                            borderWidth: 1,
+                            borderColor: "d3d3d3",
+                            borderRadius: 5,
+                        }}
+                    >
+                        <FlexBox
+                            alignItems='center'
+                            gap={15}
+                        >
+                            <Image
+                                source={{ uri: user?.profile_picture }}
+                                style={{ width: 100, height: 100, borderRadius: 50 }}
+                            />
+                            <CustomButton
+                                mode="outlined">
+                                Change Profile Picture
+                            </CustomButton>
+                        </FlexBox>
+
+                        <FlexBox
+                            gap={15}
+                            paddingVertical={20}
+                        >
+                            {renderUserPropertyValue("Name", user?.name || "")}
+                            {renderUserPropertyValue("Email", user?.email || "")}
+                            {renderUserPropertyValue("Role", user?.role || "")}
+                            {renderUserPropertyValue(
+                                "Account Created At",
+                                new Date(user?.created_at || "").toLocaleDateString(),
+                            )}
+                        </FlexBox>
+                    </FlexBox>
+
                     <CustomButton
-                        mode="outlined">
-                        Change Profile Picture
+                        onPress={onLogout}
+                    >
+                        Logout
                     </CustomButton>
+
                 </FlexBox>
-
-                <FlexBox
-                    gap={15}
-                    paddingVertical={20}
-                >
-                    {renderUserPropertyValue("Name", user?.name || "")}
-                    {renderUserPropertyValue("Email", user?.email || "")}
-                    {renderUserPropertyValue("Role", user?.role || "")}
-                    {renderUserPropertyValue(
-                        "Account Created At",
-                        new Date(user?.created_at || "").toLocaleDateString(),
-                    )}
-                </FlexBox>
-            </FlexBox>
-
-            <CustomButton
-                onPress={ onLogout }
-                >
-                Logout
-            </CustomButton>
-
-        </FlexBox>
+            </ScrollView>
+        </SafeAreaView>
     );
 };
 
