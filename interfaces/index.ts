@@ -44,3 +44,17 @@ export interface IRoom {
 
 export type IRoomCreate = Omit<IRoom, 'id' | 'created_at'>;
 export type IRoomUpdate = Partial<IRoomCreate>;
+
+export interface IBooking {
+  id: number;
+  created_at: string;
+  customer_id?: number;
+  hotel_id: number;
+  room_id: number;
+  booked_dates?: string[];
+  check_in_date?: string;
+  check_out_date: string;
+  total_amount?: number;
+  payment_id: string;
+  status?: string;
+}
